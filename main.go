@@ -8,6 +8,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -36,6 +37,14 @@ func main() {
 	zktlskey := flag.String("zk-tls-auth-key", "", "key for zk tls client authentication")
 
 	flag.Parse()
+	*listen = os.Getenv("LISTEN")
+	if *listen == "" {
+		*listen = "0.0.0.0:9141"
+	}
+
+	if *zkhosts == "" {
+		*zkhosts = os.Getenv("ZK_HOSTS")
+	}
 
 	var clientCert *tls.Certificate
 	if *zktlsauth {
